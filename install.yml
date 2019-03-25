@@ -1,0 +1,4 @@
+---
+- import_playbook: system-setup.yml
+- import_playbook: mariadb-setup.yml
+- import_playbook: zabbix-setup.yml
