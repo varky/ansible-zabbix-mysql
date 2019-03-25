@@ -1,0 +1,19 @@
+---
+mytimezone: "Europe/Zagreb"
+
+systemIP: "{{ ansible_default_ipv4.address }}"
+zbxdbname: zabbixDB
+zbxdbuser: zabbix
+zbxdbpassword: dontUSEdefaults
+zbxDBHost: "{{ systemIP }}"
+zbxListenPort: 10051
+zbxSourceIP: "{{ systemIP }}"
+zbxStartPollers: 20
+zbxStartPreprocessors: 3
+zbxStartPollersUnreachable: 5
+zbxStartTrappers: 5
+zbxStartPingers: 5
+zbxStartDiscoverers: 3
+zbxStartHTTPPollers: 2
+zbxListenIP: "{{ systemIP }}"
+zbxTimeout: 10

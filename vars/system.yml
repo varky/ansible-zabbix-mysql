@@ -1,0 +1,12 @@
+---
+sys_pkgs:
+  - vim
+  - byobu
+  - tcpdump
+  - telnet
+  - nc
+  - firewalld
+  - wget
+  - curl
+  - setroubleshoot-server
+  - net-tools

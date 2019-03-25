@@ -1,6 +1,6 @@
 ---
 - name: Install and set up mariadb
-  hosts: servera.lab.example.com
+  hosts: zbxserver
   vars_files: vars/secret.yml
   vars:
     mariadbmaxconn: 1000
