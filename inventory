@@ -1,2 +1,2 @@
-[zbxserver]
-server.domain
+[servers]
+servera.lab.example.com

@@ -1,6 +1,6 @@
 ---
 - name: Install and setup Zabbix
-  hosts: zbxserver
+  hosts: servera.lab.example.com
   vars_files: 
     - vars/zabbix.yml
     - vars/secret.yml

@@ -4,7 +4,7 @@ mytimezone: "Europe/Zagreb"
 systemIP: "{{ ansible_default_ipv4.address }}"
 zbxdbname: zabbixDB
 zbxdbuser: zabbix
-zbxdbpassword: dontUSEdefaults
+zbxdbpassword: kreten
 zbxDBHost: "{{ systemIP }}"
 zbxListenPort: 10051
 zbxSourceIP: "{{ systemIP }}"
