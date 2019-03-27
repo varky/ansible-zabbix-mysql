@@ -7,6 +7,7 @@ Basic setup was indended for a single-node deploy, but can be deployed to multip
 To achieve multi-node setup, edit inventory:
  - Zabbix server stack will be installed on the "zabbixserver" host group node.
  - Mariadb dabatabse will be installed on the "dbserver" host group node.
+ 
 and variables:
  - mariadbhostip denotes the IP of the DB server node for connection purposes.
 
