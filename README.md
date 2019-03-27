@@ -14,6 +14,9 @@ Edit variables within vars/ directory to your liking, they override defaults set
 zabbix roles.
 Edit inventory to work to your specifications. 
 
+Start setup by running:
+    ansible-playbook install.yml
+
 TO-DO:
  - Migrate passwords to ansible-vault
  - Add zabbix agent role
