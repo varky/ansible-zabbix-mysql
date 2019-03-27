@@ -1,5 +1,5 @@
 ---
-# Default system IP designation for zabbix server host
+# Default system IP designation
 systemIP: "{{ ansible_default_ipv4.address }}"
 
 # Timezone to be set in zabbix php config
@@ -9,13 +9,12 @@ mytimezone: "Europe/Zagreb"
 # Can be replaced with IP of the DB server in case the mariadb
 # is hosted on a separate server than Zabbix server
 mariadbhostip: "{{ systemIP }}"
-#mariadbhostip: 192.168.124.22
 
 # Zabbix configuration file variables
 zbxdbname: zabbixDB
 zbxdbuser: zabbix
 zbxdbpassword: kreten
-zbxDBHost: "{{ mariadbhostip }}"
+zbxDBHost: "{{ systemIP }}"
 zbxListenPort: 10051
 zbxSourceIP: "{{ systemIP }}"
 zbxStartPollers: 20

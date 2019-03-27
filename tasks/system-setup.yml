@@ -1,0 +1,19 @@
+---
+- name: Update all packages
+  yum:
+    name: "*"
+    state: latest
+    update_cache: true
+    update_only: true
+  when: system_update == true
+
+- name: Install EPEL repository
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ sys_pkgs }}"

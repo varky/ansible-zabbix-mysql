@@ -10,3 +10,4 @@ sys_pkgs:
   - curl
   - setroubleshoot-server
   - net-tools
+  - htop

@@ -1,0 +1,147 @@
+---
+- name: ensure mysql and MySQL-python installed
+  yum:
+    name: 
+      - MySQL-python
+      - mysql
+    state: latest
+
+- name: Install repository
+  yum_repository:
+    name: zabbix
+    description: "Zabbix Official Repository"
+    baseurl: http://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/
+    enabled: yes
+    gpgkey: https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
+    gpgcheck: no
+
+- name: Install non-supported packages repository
+  yum_repository:
+    name: zabbix-non-supported
+    description: "non supported packages required for zabbix"
+    baseurl: https://repo.zabbix.com/non-supported/rhel/7/x86_64/
+    enabled: yes
+    gpgcheck: no
+
+- name: Install zabbix packages
+  yum:
+    name:
+      - zabbix-server-mysql
+      - zabbix-web-mysql
+      - zabbix-agent
+    state: latest
+
+- name: Find zabbix db create.sql.gz path
+  shell: rpm -ql zabbix-server-mysql | grep create.sql.gz        
+  register: zbxdbdumppath
+
+- name: Create DB if it doesn't exist
+  mysql_db:
+    login_user: root
+    login_password: "{{ mariadbrootpw }}"
+    name: "{{ zbxdbname }}"
+    state: present
+    collation: utf8_bin
+    encoding: utf8
+  register: dbcreation
+  delegate_to: "{{ item }}"
+  with_items:
+    - "{{ groups.dbserver }}"
+
+- name: Create and setup zabbix db user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mariadbrootpw }}"
+    name: "{{ zbxdbuser }}"
+    password: "{{ zbxdbpassword }}"
+    state: present
+    priv: "{{ zbxdbname }}.*:ALL"
+    host: "%"
+  delegate_to: "{{ item }}"
+  with_items:
+    - "{{ groups.dbserver }}"
+
+- name: Import DB
+  mysql_db:
+    login_user: "{{ zbxdbuser }}"
+    login_password: "{{ zbxdbpassword }}"
+    login_host: "{{ zbxDBHost }}"
+    name: "{{ zbxdbname }}"
+    state: import
+    target: "{{ zbxdbdumppath.stdout }}"
+    collation: utf8_bin
+    encoding: utf8
+ # when: dbcreation.changed
+
+- name: Setup selinux contexts
+  seboolean:
+    name: "{{ item }}"
+    state: yes
+    persistent: yes
+  with_items:
+    - httpd_can_connect_zabbix
+    - httpd_can_network_connect_db
+    - zabbix_can_network
+    - daemons_enable_cluster_mode
+
+- name: Copy selinux module, vol 1
+  copy:
+    src: comm_zabbix_server_zabbix_t.pp
+    dest: /tmp/
+
+- name: Copy selinux module, vol 2
+  copy:
+    src: zbxble.pp
+    dest: /tmp/
+
+
+- name: Install selinux module
+  shell: "semodule -i /tmp/comm_zabbix_server_zabbix_t.pp; semodule -i /tmp/zbxble.pp"
+
+- name: Setup zabbix config file
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+
+- name: Setup firewall, vol 1
+  firewalld:
+    port: 10050-10053/tcp
+    state: enabled
+    permanent: true
+    immediate: true
+
+- name: Setup firewall, vol 2
+  firewalld:
+    service: http
+    state: enabled
+    permanent: true
+    immediate: true
+
+- name: Set php timezone in zabbix httpd config file
+  lineinfile:
+    path: /etc/httpd/conf.d/zabbix.conf
+    insertafter: "# php_value date.timezone Europe/Riga"
+    regex: "php_value date.timezone"
+    line: "php_value date.timezone {{ mytimezone }}"
+    state: present
+  notify: restart httpd
+
+- name: Setup zabbix web conf php file to skip web UI setup
+  template:
+    src: zabbix.conf.php.j2
+    dest: /etc/zabbix/web/zabbix.conf.php
+    owner: apache
+    group: apache
+    mode: 0644
+    seuser: system_u
+    serole: object_r
+    setype: httpd_sys_rw_content_t
+    
+- name: Start and enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items:
+    - httpd
+    - zabbix-server

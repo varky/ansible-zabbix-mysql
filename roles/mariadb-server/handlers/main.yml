@@ -1,0 +1,7 @@
+---
+# handlers file for roles/mariadb-server
+- name: restart mariadb
+  service:
+    name: mariadb
+    state: restarted
+    daemon_reload: true

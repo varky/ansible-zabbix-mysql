@@ -1,0 +1,75 @@
+---
+- name: Ensure mariadb is installed
+  yum:
+    name:
+      - mariadb-server
+      - MySQL-python
+    state: latest
+
+- name: Ensure mariadb network connectivity
+  firewalld:
+    service: mysql
+    state: enabled
+    permanent: true
+    immediate: true
+
+- name: Setup mariadb my.cnf
+  lineinfile:
+    path: /etc/my.cnf
+    insertafter: '\[mysqld\]'
+    regex: "^max_connections="
+    line: "max_connections={{ mariadbmaxconn }}"
+    state: present
+  notify: restart mariadb
+
+- name: Ensure path exists for mariadb systemd override 
+  file:
+    dest: /etc/systemd/system/mariadb.service.d/
+    state: directory
+
+- name: Ensure limits for mariadb
+  copy:
+    content: |
+      [Service]
+      LimitNOFILE=10000
+    dest: /etc/systemd/system/mariadb.service.d/limits.conf
+  notify: restart mariadb
+
+- name: Ensure mariadb started and enabled
+  service:
+    name: mariadb
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- block:
+    - name: Ensure root has pw or fail
+      mysql_user:
+        name: 'root'
+        host_all: yes
+        state: present
+        password: "{{ mariadbrootpw }}"
+        login_user: 'root'
+        login_password: "{{ mariadbrootpw }}"
+  rescue:
+    - name: Setup mysql root pw if not already set
+      mysql_user:
+        name: 'root'
+        host_all: yes
+        state: present
+        password: "{{ mariadbrootpw }}"
+
+- name: Remove guest account from db
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: 'root'
+    login_password: "{{ mariadbrootpw }}"
+
+- name: Remove test db
+  mysql_db:
+    name: test
+    state: absent
+    login_user: 'root'
+    login_password: "{{ mariadbrootpw }}"

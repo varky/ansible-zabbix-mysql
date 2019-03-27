@@ -1,2 +1,10 @@
-[servers]
+[zabbixserver]
 servera.lab.example.com
+
+[dbserver]
+#serverb.lab.example.com
+servera.lab.example.com
+
+[servers:children]
+zabbixserver
+dbserver

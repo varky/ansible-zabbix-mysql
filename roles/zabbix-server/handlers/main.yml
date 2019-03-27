@@ -1,0 +1,6 @@
+---
+# handlers file for roles/zabbix-server
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted

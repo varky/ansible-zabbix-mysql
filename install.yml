@@ -1,4 +1,26 @@
 ---
-- import_playbook: system-setup.yml
-- import_playbook: mariadb-setup.yml
-- import_playbook: zabbix-setup.yml
+- name: Setup server or servers
+  hosts: servers
+  vars_files:
+    - vars/system-setup.yml
+    - vars/zabbix.yml
+    - vars/secret.yml
+  vars:
+    - system_update: false
+  tasks:
+    - import_tasks: tasks/system-setup.yml
+
+- name: Setup database
+  hosts: dbserver
+  vars_files:
+    - vars/secret.yml
+  roles:
+    - roles/mariadb-server
+
+- name: Setup zabbix server
+  hosts: zabbixserver
+  vars_files:
+    - vars/secret.yml
+    - vars/zabbix.yml
+  roles:
+    - roles/zabbix-server
