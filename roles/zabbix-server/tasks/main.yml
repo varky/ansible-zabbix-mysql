@@ -10,7 +10,7 @@
   yum_repository:
     name: zabbix
     description: "Zabbix Official Repository"
-    baseurl: http://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/
+    baseurl: "http://repo.zabbix.com/zabbix/{{ zbxvers }}/rhel/7/x86_64/"
     enabled: yes
     gpgkey: https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
     gpgcheck: no

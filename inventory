@@ -1,9 +1,9 @@
 [zabbixserver]
-servera.lab.example.com
+servera.lab.example.com ansible_host=192.168.124.21
 
 [dbserver]
 #serverb.lab.example.com
-servera.lab.example.com
+servera.lab.example.com ansible_host=192.168.124.21
 
 [servers:children]
 zabbixserver

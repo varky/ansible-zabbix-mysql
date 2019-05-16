@@ -1,4 +1,6 @@
 ---
+# Zabbix version to install
+zbxvers: 4.0
 # Default system IP designation
 systemIP: "{{ ansible_default_ipv4.address }}"
 
