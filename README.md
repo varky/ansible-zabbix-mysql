@@ -1,4 +1,4 @@
-# ansible-zabbix-4.0-mysql
+# ansible-zabbix-mysql
 
 This is a basic ansible playbook for automatically setting up a mariadb-backed
 Zabbix server including all necessary dependencies and selinux setup on CentOS 7.
