@@ -29,6 +29,9 @@ hosts. Variabled defined in vars/agent.yml.
 Zabbix agent installation is automatically included in setup of both 
 database and zabbix-server nodes.
 
+When deploying zabbix agents, keep in mind newer agent versions cannot
+work with older zabbix server/proxy versions.
+
 TO-DO:
  - Migrate passwords to ansible-vault
  - Add zabbix agent role for other Distributions

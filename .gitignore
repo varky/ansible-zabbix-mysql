@@ -2,3 +2,4 @@
 *.retry
 inventory
 ansible.cfg
+.gitignore
