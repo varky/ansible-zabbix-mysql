@@ -13,14 +13,19 @@
 - name: Setup database
   hosts: dbserver
   vars_files:
+    - vars/zabbix.yml
     - vars/secret.yml
+    - vars/agent.yml
   roles:
     - roles/mariadb-server
+    - roles/zabbix-agent-rhel7
 
 - name: Setup zabbix server
   hosts: zabbixserver
   vars_files:
     - vars/secret.yml
     - vars/zabbix.yml
+    - vars/agent.yml
   roles:
     - roles/zabbix-server
+    - roles/zabbix-agent-rhel7

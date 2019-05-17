@@ -1,0 +1,7 @@
+---
+# handlers file for zabbix-agent-rhel7
+- name: restart zabbix-agent
+  service:
+    name: zabbix-agent
+    state: restarted
+

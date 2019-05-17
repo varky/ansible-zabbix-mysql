@@ -1,0 +1,18 @@
+---
+## Specific variables for zabbix-agent configuration
+zbxagentvers: 4.2
+zbxagentsrvaddr: "{{ zbxSourceIP }}"
+zbxagentTimeout: 5
+
+## Additional option defaults, override by uncommenting and changing
+# zbxagentUser: zabbix
+# zbxagentListenPort: 10050
+# zbxagentListenIP: 0.0.0.0
+# zbxagentStartAgents: 3
+# zbxagentLogFileSize: 0
+# zbxagentEnableRemoteCommands: 0
+# zbxagentLogRemoteCommands: 0
+# zbxagentRefreshActiveChecks: 120
+# zbxagentBufferSend: 5
+# zbxagentBufferSize: 100
+# zbxagentMaxLinesPerSecond: 20

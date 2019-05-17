@@ -1,0 +1,40 @@
+---
+# tasks file for zabbix-agent-rhel7
+- name: Setup repository
+  yum_repository:
+    name: zabbix
+    description: "Zabbix Official Repository"
+    baseurl: "http://repo.zabbix.com/zabbix/{{ zbxagentvers }}/rhel/7/x86_64/"
+    enabled: yes
+    gpgkey: https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
+    gpgcheck: no
+
+- name: Install zabbix agent
+  yum:
+    name: zabbix-agent
+    state: latest
+    update_cache: true
+
+- name: Install zabbix agent config
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+  notify: restart zabbix-agent
+
+- name: gather service facts for firewall requirements
+  service_facts:
+
+- name: setup firewall if firewalld is active
+  firewalld:
+    port: "{{ zbxagentListenPort }}/tcp"
+    permanent: true
+    immediate: true
+    state: enabled
+  when: ansible_facts.services['firewalld.service'].state == "running"
+
+- name: Start and enable zabbix agent
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: true
+    

@@ -22,8 +22,15 @@ Note: only versions 4.0-4.2 have been tested so far. YMMV with older/newer relea
 Start setup by running:
     ansible-playbook install.yml
 
+
+Zabbix agent installation available with playbook "install-agent.yml", only for RHEL7 family
+hosts. Variabled defined in vars/agent.yml. 
+
+Zabbix agent installation is automatically included in setup of both 
+database and zabbix-server nodes.
+
 TO-DO:
  - Migrate passwords to ansible-vault
- - Add zabbix agent role
+ - Add zabbix agent role for other Distributions
  - Merge selinux modules
 

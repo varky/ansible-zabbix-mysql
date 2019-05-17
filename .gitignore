@@ -1,0 +1,4 @@
+### Ansible ###
+*.retry
+inventory
+ansible.cfg

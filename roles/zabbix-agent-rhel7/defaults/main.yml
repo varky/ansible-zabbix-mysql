@@ -1,0 +1,17 @@
+---
+# defaults file for zabbix-agent-rhel7
+zbxagentvers: 4.0
+zbxagentsrvaddr: 192.168.1.234
+zbxagentTimeout: 5
+zbxagentUser: zabbix
+
+zbxagentListenPort: 10050
+zbxagentListenIP: 0.0.0.0
+zbxagentStartAgents: 3
+zbxagentLogFileSize: 0
+zbxagentEnableRemoteCommands: 0
+zbxagentLogRemoteCommands: 0
+zbxagentRefreshActiveChecks: 120
+zbxagentBufferSend: 5
+zbxagentBufferSize: 100
+zbxagentMaxLinesPerSecond: 20
